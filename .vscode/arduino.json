@@ -1,0 +1,6 @@
+{
+    "board": "arduino:avr:uno",
+    "sketch": "main\\main.ino",
+    "debugger": "stlink-1.0",
+    "port": "COM3"
+}
