@@ -13,8 +13,8 @@
   3. long click
 */
 const int buttonPin = 4;
-bool buttonActive = HIGH; // not input
-bool lastButtonActive = HIGH;
+bool buttonActive = LOW; // not input
+bool lastButtonActive = LOW;
 int buttonState, lastButtonState = 0; // off
 //time
 int holdTime = 2000;
@@ -67,30 +67,32 @@ void setup()
 {
   Serial.begin(9600);
   Serial.println("FingerePrint Case Setup");
-
+  fserial.begin(57600);   
   pinMode(ledPin, OUTPUT);
   pinMode(buttonPin, INPUT);
   digitalWrite(buttonPin, HIGH );
-  //Serial.begin(9600);
   servo1.attach(servoPin);
   servo2.attach(servoPin);
- 
+  readyFingerPrint();
+  servo1.write(initial_pos);
+  servo2.write(initial_pos);
 }
 
 void loop()
 {
   int b = checkButton();
-  /* if(b == 1){
-    readyFingerPrint();
+  if(b == 1){
     if(isEmptyPrint()){
       enroll();
     }
     else{
       if(isOpen){
+        Serial.println("Close case");
         controlServo(false);
       }
       else{
         if(readFinger() == FPM_OK){
+          Serial.println("Open case");
           controlServo(true);
         }
       }
@@ -101,7 +103,7 @@ void loop()
   } 
   else if(b == 3){
     deleteFingerPrint();
-  } */
+  }
 }
 /////////////////////// end main
 

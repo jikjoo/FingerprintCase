@@ -1,10 +1,10 @@
 
 // button
-bool checkButton(){
+int checkButton(){
   int event = 0;
   int buttonActive = digitalRead(buttonPin);
   // Button pressed down
-  if(buttonActive == LOW && lastButtonActive == HIGH && millis() - upTime > debounceDelay){
+  if(buttonActive == HIGH && lastButtonActive == LOW && millis() - upTime > debounceDelay){
     downTime = millis();
     ignoreUp = false;
     waitForUp = false;
@@ -15,11 +15,11 @@ bool checkButton(){
     DCwaiting = false;
   }
   //Button released
-  else if(buttonActive == HIGH && lastButtonActive == LOW && millis() - downTime > debounceDelay){
+  else if(buttonActive == LOW && lastButtonActive == HIGH && millis() - downTime > debounceDelay){
     if(not ignoreUp){
       upTime = millis();
       // Double click
-      if(DConUp = false) DCwaiting = true;
+      if(DConUp == false) DCwaiting = true;
       else {
         event = 2;
         DConUp = false;
@@ -29,12 +29,12 @@ bool checkButton(){
     }
   }
   // Test for normal click
-  if(buttonActive == HIGH && millis() - upTime >= DCgap && DCwaiting == true && DConUp==false && singleOK == true){
+  if(buttonActive == LOW && millis() - upTime >= DCgap && DCwaiting == true && DConUp==false && singleOK == true){
     event = 1;
     DCwaiting = false;
   }
   // Test for hold
-  if (buttonActive == LOW && (millis() - downTime) >= holdTime) {
+  if (buttonActive == HIGH && (millis() - downTime) >= holdTime) {
   // Trigger "normal" hold
     if (not holdEventPast) {
       event = 3;
