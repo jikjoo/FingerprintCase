@@ -45,16 +45,17 @@ bool holdEventPast = false;
 Servo servo1;
 Servo servo2;
 
-const int initial_pos = 0;
-const int max_pos = 180;
-int pos = initial_pos;
-bool isOpen = false; // closed
-const int servoPin = 9;
+const int initial_pos = 0; //open state
+const int max_pos = 90; // closed state
+int pos = initial_pos; // current state
+bool isOpen = true; // open
+const int servoPin1 = 9;
+const int servoPin2 = 10;
 
 // led
-/*  */
 const int ledPin = 13;
-
+int ledState = LOW;
+unsigned long previousMillis = 0;
 // fingerPrint
 bool finger_readState = false; // switch off
 SoftwareSerial fserial(2, 3);
@@ -71,50 +72,45 @@ void setup()
   pinMode(ledPin, OUTPUT);
   pinMode(buttonPin, INPUT);
   digitalWrite(buttonPin, HIGH );
-  servo1.attach(servoPin);
-  servo2.attach(servoPin);
+  servo1.attach(servoPin1);
+  servo2.attach(servoPin2);
   readyFingerPrint();
   servo1.write(initial_pos);
-  servo2.write(initial_pos);
+  //servo2.write(initial_pos);
 }
 
 void loop()
 {
+  digitalWrite(ledPin, isOpen);
   int b = checkButton();
   if(b == 1){
-    if(isEmptyPrint()){
-      enroll();
-    }
-    else{
-      if(isOpen){
-        Serial.println("Close case");
-        controlServo(false);
+    if(isOpen){
+      if(isEmptyPrint()){
+        led_once(2000);
+        enroll();
       }
       else{
+        Serial.println("Close case");
+        closeServo();
+      }
+    }
+    else{ // if closed
         if(readFinger() == FPM_OK){
           Serial.println("Open case");
-          controlServo(true);
+          openServo();
         }
-      }
+        else{
+          Serial.println("Fail to Open");
+          led_twice();
+        }
     }
   }
   else if(b == 2){
+    led_once(2000);
     enroll();
   } 
   else if(b == 3){
+    led_triple();
     deleteFingerPrint();
   }
-}
-/////////////////////// end main
-
-void controlServo(bool open_or_close){
-  //  digitalWrite(servoPin,finger_readState && ButtonState);
-    if(!isOpen){
-      for(pos ; pos < max_pos ; pos += 1){
-        servo1.write(pos);
-        servo2.write(pos);
-        delay(10);
-      } 
-    }
-    isOpen != isOpen;
 }

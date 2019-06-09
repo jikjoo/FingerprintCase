@@ -1,7 +1,7 @@
 
 //enroll
 void enroll(){
-   Serial.println("enroll: Searching for a free slot to store the template...");
+    Serial.println("enroll: Searching for a free slot to store the template...");
     int16_t fid;
     if (get_free_id(&fid)){
         while(enroll_finger(fid) != FPM_OK);

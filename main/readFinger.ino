@@ -60,6 +60,7 @@ int16_t readFinger(){
             Serial.println("Unknown error");
             return p;
     }
+    finger.led_off();
 
     Serial.println("Remove finger");
     p = 0;
@@ -73,7 +74,10 @@ int16_t readFinger(){
     uint16_t fid, score;
     p = finger.searchDatabase(&fid, &score);
     if (p == FPM_OK) {
-        Serial.println("Found a print match!");
+        // found a match!
+        Serial.print("Found ID #"); Serial.print(fid);
+        Serial.print(" with confidence of "); Serial.println(score);
+        return p;
     } else if (p == FPM_PACKETRECIEVEERR) {
         Serial.println("Communication error");
         return p;
@@ -91,7 +95,5 @@ int16_t readFinger(){
         return p;
     }
 
-    // found a match!
-    Serial.print("Found ID #"); Serial.print(fid);
-    Serial.print(" with confidence of "); Serial.println(score);
+    
 }

@@ -2,9 +2,6 @@
 	"folders": [
 		{
 			"path": "."
-		},
-		{
-			"path": "C:\\Users\\jikjoo\\Documents\\Arduino\\libraries\\FPM-master"
 		}
 	]
 }
