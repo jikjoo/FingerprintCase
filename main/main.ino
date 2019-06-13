@@ -50,13 +50,16 @@ const int max_pos = 90; // closed state
 int pos = initial_pos; // current state
 bool isOpen = true; // open
 const int servoPin1 = 9;
-const int servoPin2 = 10;
+const int servoPin2 = 7;
 
 // led
 const int ledPin = 13;
 int ledState = LOW;
 unsigned long previousMillis = 0;
 // fingerPrint
+/*  pin #2 is IN from sensor (GREEN wire)
+ *  pin #3 is OUT from arduino  (WHITE/YELLOW wire)
+ */
 bool finger_readState = false; // switch off
 SoftwareSerial fserial(2, 3);
 
@@ -83,8 +86,8 @@ void loop()
 {
   digitalWrite(ledPin, isOpen);
   int b = checkButton();
-  if(b == 1){
-    if(isOpen){
+  if(isOpen){
+    if(b == 1){
       if(isEmptyPrint()){
         led_once(2000);
         enroll();
@@ -94,23 +97,25 @@ void loop()
         closeServo();
       }
     }
-    else{ // if closed
-        if(readFinger() == FPM_OK){
-          Serial.println("Open case");
-          openServo();
-        }
-        else{
-          Serial.println("Fail to Open");
-          led_twice();
-        }
+    else if(b == 2){
+      led_once(2000);
+      enroll();
+    } 
+    else if(b == 3){
+      led_triple();
+      deleteFingerPrint();
     }
   }
-  else if(b == 2){
-    led_once(2000);
-    enroll();
-  } 
-  else if(b == 3){
-    led_triple();
-    deleteFingerPrint();
+  else{ // if closed
+    if(b==1){
+      if(readFinger() == FPM_OK){
+        Serial.println("Open case");
+        openServo();
+      }
+      else{
+        Serial.println("Fail to Open");
+        led_twice();
+      }
+    }
   }
 }

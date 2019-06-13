@@ -4,7 +4,9 @@ void enroll(){
     Serial.println("enroll: Searching for a free slot to store the template...");
     int16_t fid;
     if (get_free_id(&fid)){
-        while(enroll_finger(fid) != FPM_OK);
+        while(enroll_finger(fid) != FPM_OK){
+            led_twice();
+        }
     }
     else
         Serial.println("No free slot in flash library!");
@@ -75,6 +77,7 @@ int16_t enroll_finger(int16_t fid) {
     }
     // OK success!
     finger.led_off();
+    led_once(500);
 
     p = finger.image2Tz(1);
     delay(1000);
@@ -202,6 +205,7 @@ int16_t enroll_finger(int16_t fid) {
     delay(1000);
     if (p == FPM_OK) {
         Serial.println("Stored!");
+        led_once(500);
         return p;
     } else if (p == FPM_PACKETRECIEVEERR) {
         Serial.println("Communication error");

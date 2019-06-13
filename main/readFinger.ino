@@ -5,6 +5,7 @@ int16_t readFinger(){
     /* first get the finger image */
     Serial.println("readFinger: Waiting for valid finger");
     while (p != FPM_OK) {
+        delay(1000);
         p = finger.getImage();
         switch (p) {
             case FPM_OK:
@@ -31,9 +32,10 @@ int16_t readFinger(){
         }
         yield();
     }
-    finger.led_off();
+    
     /* convert it */
     p = finger.image2Tz();
+    delay(1000);
     switch (p) {
         case FPM_OK:
             Serial.println("Image converted");
@@ -60,7 +62,6 @@ int16_t readFinger(){
             Serial.println("Unknown error");
             return p;
     }
-    finger.led_off();
 
     Serial.println("Remove finger");
     p = 0;
@@ -73,6 +74,7 @@ int16_t readFinger(){
     /* search the database for the converted print */
     uint16_t fid, score;
     p = finger.searchDatabase(&fid, &score);
+    delay(1000);
     if (p == FPM_OK) {
         // found a match!
         Serial.print("Found ID #"); Serial.print(fid);
