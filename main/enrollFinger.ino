@@ -4,7 +4,7 @@ void enroll(){
     Serial.println("enroll: Searching for a free slot to store the template...");
     int16_t fid;
     if (get_free_id(&fid)){
-        while(enroll_finger(fid) != FPM_OK){
+        if(enroll_finger(fid) != FPM_OK){
             led_twice();
         }
     }
@@ -49,7 +49,7 @@ int16_t enroll_finger(int16_t fid) {
     finger.led_on();
     while (p != FPM_OK) {
         p = finger.getImageNL();
-        delay(1000);
+        delay(100);
         switch (p) {
             case FPM_OK:
                 Serial.println("Image taken");
@@ -59,25 +59,25 @@ int16_t enroll_finger(int16_t fid) {
                 break;
             case FPM_PACKETRECIEVEERR:
                 Serial.println("Communication error");
-                return false;
+                return p;
             case FPM_IMAGEFAIL:
                 Serial.println("Imaging error");
-                return false;
+                return p;
             case FPM_TIMEOUT:
                 Serial.print("Timeout!  ");
-                return false;
+                return p;
             case FPM_READ_ERROR:
                 Serial.println("Got wrong PID or length!");
-                return false;
+                return p;
             default:
                 Serial.println("Unknown error");
-                return false;
+                return p;
         }
         yield();
     }
     // OK success!
     finger.led_off();
-    led_once(500);
+    //led_once(500);
 
     p = finger.image2Tz(1);
     delay(1000);
@@ -120,7 +120,7 @@ int16_t enroll_finger(int16_t fid) {
     Serial.println("Place same finger again");
     while (p != FPM_OK) {
         p = finger.getImageNL();
-        delay(1000);
+        delay(100);
         switch (p) {
             case FPM_OK:
                 Serial.println("Image taken");
@@ -142,7 +142,7 @@ int16_t enroll_finger(int16_t fid) {
                 return p;
             default:
                 Serial.println("Unknown error");
-                return false;
+                return p;
         }
         yield();
     }

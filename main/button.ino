@@ -34,7 +34,7 @@ int checkButton(){
     DCwaiting = false;
   }
   // Test for hold
-  if (buttonActive == HIGH && (millis() - downTime) >= holdTime) {
+  /* if (buttonActive == HIGH && (millis() - downTime) >= holdTime) {
   // Trigger "normal" hold
     if (not holdEventPast) {
       event = 3;
@@ -44,8 +44,8 @@ int checkButton(){
       DCwaiting = false;
       //downTime = millis();
       holdEventPast = true;
-    }
-  }
+    } 
+  } */
   
   lastButtonActive = buttonActive;
   switch (event)

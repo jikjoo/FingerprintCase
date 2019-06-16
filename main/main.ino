@@ -13,7 +13,7 @@
   3. long click
 */
 const int buttonPin = 4;
-bool buttonActive = LOW; // not input
+//bool buttonActive = LOW; // not input
 bool lastButtonActive = LOW;
 int buttonState, lastButtonState = 0; // off
 //time
@@ -50,7 +50,6 @@ const int max_pos = 90; // closed state
 int pos = initial_pos; // current state
 bool isOpen = true; // open
 const int servoPin1 = 9;
-const int servoPin2 = 7;
 
 // led
 const int ledPin = 13;
@@ -76,7 +75,6 @@ void setup()
   pinMode(buttonPin, INPUT);
   digitalWrite(buttonPin, HIGH );
   servo1.attach(servoPin1);
-  servo2.attach(servoPin2);
   readyFingerPrint();
   servo1.write(initial_pos);
   //servo2.write(initial_pos);
@@ -101,10 +99,10 @@ void loop()
       led_once(2000);
       enroll();
     } 
-    else if(b == 3){
+    /* else if(b == 3){
       led_triple();
       deleteFingerPrint();
-    }
+    } */
   }
   else{ // if closed
     if(b==1){
